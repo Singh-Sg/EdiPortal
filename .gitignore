@@ -1,0 +1,11 @@
+staticfiles/
+EdiPortal/static/
+secrets/
+
+*.swp
+*.pyc
+.env
+*.sqlite3
+.DS_Store
+
+.vscode/
