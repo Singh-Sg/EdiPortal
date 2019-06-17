@@ -9,7 +9,6 @@ Getting Started
 
 	github repo :https://github.com/Singh-Sg/EdiPortal.git
 	
-		$ sudo apt-get install pip /sudo apt-get install python3-pip
 		$ sudo apt-get install git
 		$ git clone https://github.com/Singh-Sg/EdiPortal.git
 
