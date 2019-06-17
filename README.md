@@ -7,13 +7,18 @@ Getting Started
 
 	To work on the sample code, you'll need to clone project's repository to your local computer. If you haven't, do that first.
 
-	bitbucket repo :
-
-	git clone
+	github repo :https://github.com/Singh-Sg/EdiPortal.git
+	
+		$ sudo apt-get install pip /sudo apt-get install python3-pip
+		$ sudo apt-get install git
+		$ git clone https://github.com/Singh-Sg/EdiPortal.git
 
 	1)Create a Python virtual environment for your Django project. This virtual environment allows you to isolate this project and install any packages you need without affecting the system Python installation. At the terminal, type the following command:
 
+		$ sudo apt-get install pip or sudo apt-get install python3-pip
+		$ sudo pip install virtualenv or sudo pip3 install virtualenv 
 		$ virtualenv -p python3.7 venv
+		
 
 	2)Activate the virtual environment:
 
