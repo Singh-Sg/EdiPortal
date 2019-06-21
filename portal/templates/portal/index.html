@@ -29,20 +29,19 @@ tr:nth-child(even) {
 
 {% block content %}
 
-<a href="#" data-toggle="modal" class='excel-upload' data-target="#importXl">Update Exel sheets for latest transfer</a>
+<a href="#" data-toggle="modal" class='excel-upload' data-target="#importXl">Import ExcelSheet</a>
 <h1 align="center">HP Voltage Service  Portal</h1>
  <div class="servive">
   <div class="card">
     <div class="card-header">
       <h2 class="mb-0">
         <button class="btn btn-link" type="button">
-          Total Service request
+          Total Service request : {{data}}
         </button>
       </h2>
     </div>
     <div class="card-body">
-	        Total number of record: {{data}}
-	</div>
+  	</div>
 
     <div class="accordion main-data" id="accordionExample">
 	  <div class="card">
@@ -56,37 +55,49 @@ tr:nth-child(even) {
 
 	    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
 	      <div class="card-body">
-	         <table>
-            <tr>
-              <th>ASOF</th>
-              <th>ENVIRONMENT</th>
-              <th>USERNAME</th>
-
-              <th>VLTG IDENTITY</th>
-              <th>CVPRODUCT</th>
-              <th>CVAPI</th>
-
-              <th>SCRIP</th>
-              <th>TYPEOFAPI</th>
-              <th>HOSTNAME</th>
-
-              <th>CREATEDT</th>
-            </tr>
-          {% for data in query %}
-            <tr>
-              <td>{{data.asof}}</td>
-              <td>{{data.environment}}</td>
-              <td>{{data.username}}</td>
-              <td>{{data.vltg_identity}}</td>
-              <td>{{data.cvproduct}}</td>
-              <td>{{data.cvapi}}</td>
-              <td>{{data.srcip}}</td>
-              <td>{{data.typeofapi}}</td>
-              <td>{{data.hostname}}</td>
-              <td>{{data.create_dt}}</td>
-            </tr>
-          {% endfor %}
-          </table>
+          <div class="container">
+            <div class="row">
+              <div class="col-sm">
+                  <table>
+                    <tr>
+                      <th>Environment</th>
+                      <th>Total Count</th>
+                    </tr>
+                  {% for data in environment %}
+                    <tr>
+                      <td onclick="env('{{data.environment}}')" data-id={{data.environment}}>{{data.environment}}</td>
+                      <td>{{data.name_count}}</td>
+                    </tr>
+                  {% endfor %}
+                  </table>
+              </div>
+              <div class="col-sm">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>USERNAME</th>
+                        <th>Total</th>
+                      </tr>
+                    </thead>
+                    <tbody id="byUserName">
+        
+                    </tbody>
+                  </table>
+              </div>
+              <div class="col-sm">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>By Month</th>
+                        <th>Total</th>
+                      </tr>
+                    </thead>
+                    <tbody id="byMonthEnv">
+                    </tbody>
+                  </table>
+              </div>
+            </div>
+          </div>
 	      </div>
 	    </div>
 	  </div>
@@ -94,13 +105,54 @@ tr:nth-child(even) {
 	    <div class="card-header" id="headingTwo">
 	      <h2 class="mb-0">
 	        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-	          Service Request by user
+	          Service Request by User Name
 	        </button>
 	      </h2>
 	    </div>
 	    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
 	      <div class="card-body">
-	        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+          <div class="container">
+            <div class="row">
+              <div class="col-sm">
+                  <table>
+                    <tr>
+                      <th>User Name</th>
+                      <th>Total COUNT</th>
+                    </tr>
+                  {% for data in byuser %}
+                    <tr>
+                      <td onclick="userEnv('{{data.username}}')" data-id={{data.username}}>{{data.username}}</td>
+                      <td>{{data.name_count}}</td>
+                    </tr>
+                  {% endfor %}
+                  </table>
+              </div>
+              <div class="col-sm">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Environment</th>
+                        <th>Total</th>
+                      </tr>
+                    </thead>
+                    <tbody id="userByEnv">
+                  </tbody>
+                  </table>
+              </div>
+              <div class="col-sm">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>By Month</th>
+                        <th>Total</th>
+                      </tr>
+                    </thead>
+                    <tbody id="userByEnvBymonth">
+                    </tbody>
+                  </table>
+              </div>
+            </div>
+          </div>
 	      </div>
 	    </div>
 	  </div>
@@ -108,14 +160,56 @@ tr:nth-child(even) {
 	    <div class="card-header" id="headingThree">
 	      <h2 class="mb-0">
 	        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-	          Service Request by user
+	          Service Request by Month
 	        </button>
 	      </h2>
 	    </div>
 	    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
-	      <div class="card-body">
-	        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-	      </div>
+	     <div class="card-body">
+          <div class="container">
+            <div class="row">
+              <div class="col-sm">
+                  <table>
+                    <tr>
+                      <th>Month</th>
+                      <th>Total Count</th>
+                    </tr>
+                  {% for data in byMonth %}
+                    <tr>
+                      <td onclick="envByMonth('{{data.create_dt__month}}')">
+                        {{data.create_dt__month}}</td>
+                      <td>{{data.name_count}}</td>
+                    </tr>
+                  {% endfor %}
+                  </table>
+              </div>
+              <div class="col-sm">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Environment</th>
+                        <th>Total Count</th>
+                      </tr>
+                    </thead>
+                    <tbody id="envBydate">
+                  </tbody>
+                  </table>
+              </div>
+              <div class="col-sm">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>UserName</th>
+                        <th>Total</th>
+                      </tr>
+                    </thead>
+                    <tbody id="userCountByEnvBymonth">
+                    </tbody>
+                  </table>
+              </div>
+            </div>
+          </div>
+        </div>
 	    </div>
 	  </div>
 	</div>
@@ -184,11 +278,140 @@ $(document).on('submit', ".excel-form1", function(e){
               error: function(result){
                $('#importXl').modal('hide');
                $('#myfile').val('');
-               swal('Oops!', 'Upload failed, Check excel-sheet', 'error')
-                 
-              }
-          });
+               swal('Oops!', 'Upload failed, Check excel-sheet', 'error')        
+        }
+    });
 })
+
+function env(env) {
+  $.ajax({
+    type: "GET",
+    url: "env/",
+    data: {"environment":env},
+    success: function(data){
+      if(data.status_code == "200"){
+        $('#byUserName').text('')
+        $('#byMonthEnv').text('')
+        $(data.data).each(function( index ) {
+          $('#byUserName').append(
+              "<tr><td onclick=byMonth('"+this.username+"','"+data.env+"')\
+              data-username="+this.username+" data-env="+data.env+">"+this.username+"</td>\
+                    <td>"+this.name_count+"</td>\
+               </tr>"
+              )
+          });
+        }
+      }
+  });
+}
+
+
+function byMonth(username, env) {
+  $.ajax({
+    type: "GET",
+    url: "env-by-month/",
+    data: {"username":username, "environment":env,},
+    success: function(data){
+      if(data.status_code == "200"){
+       $('#byMonthEnv').text('')
+          $(data.data).each(function( index ) {
+            $('#byMonthEnv').append(
+                "<tr><td>"+this.create_dt__month+"</td>\
+                      <td>"+this.name_count+"</td>\
+                 </tr>"
+                )
+            });
+        }
+      }
+  });
+}
+
+
+function userEnv(username) {
+  $.ajax({
+    type: "GET",
+    url: "env-by-users/",
+    data: {"username":username},
+    success: function(data){
+      if(data.status_code == "200"){
+        $('#userByEnv').text('')
+        $('#userByEnvBymonth').text('')
+        $(data.data).each(function( index ) {
+          $('#userByEnv').append(
+              "<tr><td onclick=userEnvbyMonth('"+this.environment+"','"+data.username+"')\
+                >"+this.environment+"</td>\
+                    <td>"+this.name_count+"</td>\
+               </tr>"
+              )
+          });
+        }
+    }
+  });
+}
+
+
+function userEnvbyMonth(environment, username) {
+  $.ajax({
+    type: "GET",
+    url: "env-by-month/",
+    data: {"username":username, "environment":environment},
+    success: function(data){
+      if(data.status_code == "200"){
+       $('#userByEnvBymonth').text('')
+        $(data.data).each(function( index ) {
+          $('#userByEnvBymonth').append(
+              "<tr><td>"+this.create_dt__month+"</td>\
+                    <td>"+this.name_count+"</td>\
+               </tr>"
+              )
+          });
+      }
+    }
+  });
+}
+
+
+function envByMonth(month) {
+  $.ajax({
+    type: "GET",
+    url: "environments-by-month/",
+    data: {"month":month},
+    success: function(data){
+      if(data.status_code == "200"){
+       $('#envBydate').text('')
+        $(data.data).each(function( index ) {
+          $('#envBydate').append(
+              "<tr onclick=userEnvbyMonthByEnv('"+this.environment+"','"+data.month+"')><td>"+this.environment+"</td>\
+                    <td>"+this.name_count+"</td>\
+               </tr>"
+              )
+          });
+      }
+    }
+  });
+}
+
+
+function userEnvbyMonthByEnv(environment, month) {
+  $.ajax({
+    type: "GET",
+    url: "user-by-environments-by-month/",
+    data: {"month":month, 'environment':environment},
+    success: function(data){
+      if(data.status_code == "200"){
+       $('#userCountByEnvBymonth').text('')
+        $(data.data).each(function( index ) {
+          $('#userCountByEnvBymonth').append(
+              "<tr><td>"+this.username+"</td>\
+                    <td>"+this.name_count+"</td>\
+               </tr>"
+              )
+          });
+      }
+    }
+  });
+}
+
 </script>
 {% endblock %}
 
