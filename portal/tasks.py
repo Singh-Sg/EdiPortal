@@ -1,4 +1,5 @@
 import string
+import logging
 import pandas as pd
 from celery import shared_task
 from django.http import JsonResponse
