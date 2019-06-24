@@ -1,27 +1,18 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block stylesheet %}
 <style type="text/css">
 .main-data{
 	margin-left: 15px;
+  margin-right: 15px;
+
+}
+img {
+  display: block;
+  margin: 0 auto;
 }
 
-/*table {
-  font-family: arial, sans-serif;
-  border-collapse: collapse;
-  width: 100%;
-}
 
-td, th {
-  border: 1px solid #dddddd;
-  text-align: left;
-  padding: 8px;
-}
-
-tr:nth-child(even) {
-  background-color: #dddddd;
-}
-*/
-/*tr:hover td { background:#4d8ff9; }*/
 </style>
 {% endblock %}
 
@@ -32,25 +23,33 @@ tr:nth-child(even) {
 {% block content %}
 
 <a href="#" data-toggle="modal" class='excel-upload' data-target="#importXl">Import ExcelSheet</a>
+
+
+<img src="{% static 'portal/images/hplogo.jpg' %}" alt="logo" width="100" height="100"> 
+<p>
 <h1 align="center">HP Voltage Service  Portal</h1>
+
+</p>
+
+
  <div class="servive">
   <div class="card">
-    <div class="card-header">
+    <!-- <div class="card-header"> -->
       <h2 class="mb-0">
-        <button class="btn btn-link" type="button">
-          Total Service request : {{data}}
+        <button class="btn " type="button">
+          <h3>Total Service Request :<b> {{data}} </b></h3>
         </button>
       </h2>
-    </div>
-    <div class="card-body">
-  	</div>
+    <!-- </div> -->
+   <!--  <div class="card-body">
+  	</div> -->
 
     <div class="accordion main-data" id="accordionExample">
 	  <div class="card">
 	    <div class="card-header" id="headingOne">
 	      <h2 class="mb-0">
-	        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-	          Service Request by environment
+	        <button class="btn" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+	          <h5>Service Request By Environment </h5>
 	        </button>
 	      </h2>
 	    </div>
@@ -90,8 +89,8 @@ tr:nth-child(even) {
 	  <div class="card">
 	    <div class="card-header" id="headingTwo">
 	      <h2 class="mb-0">
-	        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-	          Service Request by User Name
+	        <button class="btn collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+	          <h5>Service Request By User Name</h5>
 	        </button>
 	      </h2>
 	    </div>
@@ -129,8 +128,8 @@ tr:nth-child(even) {
 	  <div class="card">
 	    <div class="card-header" id="headingThree">
 	      <h2 class="mb-0">
-	        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-	          Service Request by Month
+	        <button class="btn collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+	          <h5>Service Request By Month</h5>
 	        </button>
 	      </h2>
 	    </div>
