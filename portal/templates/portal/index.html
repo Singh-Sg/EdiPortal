@@ -5,7 +5,7 @@
 	margin-left: 15px;
 }
 
-table {
+/*table {
   font-family: arial, sans-serif;
   border-collapse: collapse;
   width: 100%;
@@ -20,6 +20,8 @@ td, th {
 tr:nth-child(even) {
   background-color: #dddddd;
 }
+*/
+/*tr:hover td { background:#4d8ff9; }*/
 </style>
 {% endblock %}
 
@@ -58,43 +60,27 @@ tr:nth-child(even) {
           <div class="container">
             <div class="row">
               <div class="col-sm">
-                  <table>
-                    <tr>
-                      <th>Environment</th>
-                      <th>Total Count</th>
-                    </tr>
-                  {% for data in environment %}
-                    <tr>
-                      <td onclick="env('{{data.environment}}')" data-id={{data.environment}}>{{data.environment}}</td>
-                      <td>{{data.name_count}}</td>
-                    </tr>
-                  {% endfor %}
-                  </table>
-              </div>
-              <div class="col-sm">
-                  <table>
+                  <table class="table table-bordered table-hover">
                     <thead>
                       <tr>
-                        <th>USERNAME</th>
-                        <th>Total</th>
+                        <th>Environment</th>
+                        <th>Total Count</th>
                       </tr>
                     </thead>
-                    <tbody id="byUserName">
-        
+                    <tbody>
+                      {% for data in environment %}
+                        <tr onclick="env('{{data.environment}}')" data-id={{data.environment}}>
+                          <td>{{data.environment}}</td>
+                          <td>{{data.name_count}}</td>
+                        </tr>
+                      {% endfor %}
                     </tbody>
                   </table>
               </div>
-              <div class="col-sm">
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>By Month</th>
-                        <th>Total</th>
-                      </tr>
-                    </thead>
-                    <tbody id="byMonthEnv">
-                    </tbody>
-                  </table>
+              <div class="col-sm" id="byUserNameMain">
+                  
+              </div>
+              <div class="col-sm" id="byMonthEnvMain">
               </div>
             </div>
           </div>
@@ -114,42 +100,26 @@ tr:nth-child(even) {
           <div class="container">
             <div class="row">
               <div class="col-sm">
-                  <table>
-                    <tr>
-                      <th>User Name</th>
-                      <th>Total COUNT</th>
-                    </tr>
-                  {% for data in byuser %}
-                    <tr>
-                      <td onclick="userEnv('{{data.username}}')" data-id={{data.username}}>{{data.username}}</td>
-                      <td>{{data.name_count}}</td>
-                    </tr>
-                  {% endfor %}
-                  </table>
-              </div>
-              <div class="col-sm">
-                  <table>
+                  <table class="table table-bordered table-hover">
                     <thead>
                       <tr>
-                        <th>Environment</th>
-                        <th>Total</th>
+                        <th>User Name</th>
+                        <th>Total COUNT</th>
                       </tr>
                     </thead>
-                    <tbody id="userByEnv">
-                  </tbody>
+                    <tbody>
+                      {% for data in byuser %}
+                        <tr onclick="userEnv('{{data.username}}')" data-id={{data.username}}>
+                          <td>{{data.username}}</td>
+                          <td>{{data.name_count}}</td>
+                        </tr>
+                      {% endfor %}
+                     </tbody>
                   </table>
               </div>
-              <div class="col-sm">
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>By Month</th>
-                        <th>Total</th>
-                      </tr>
-                    </thead>
-                    <tbody id="userByEnvBymonth">
-                    </tbody>
-                  </table>
+              <div class="col-sm" id="userByEnvMain">
+              </div>
+              <div class="col-sm" id="userByEnvBymonthMain">
               </div>
             </div>
           </div>
@@ -169,43 +139,26 @@ tr:nth-child(even) {
           <div class="container">
             <div class="row">
               <div class="col-sm">
-                  <table>
-                    <tr>
-                      <th>Month</th>
-                      <th>Total Count</th>
-                    </tr>
-                  {% for data in byMonth %}
-                    <tr>
-                      <td onclick="envByMonth('{{data.create_dt__month}}')">
-                        {{data.create_dt__month}}</td>
-                      <td>{{data.name_count}}</td>
-                    </tr>
-                  {% endfor %}
-                  </table>
-              </div>
-              <div class="col-sm">
-                  <table>
+                  <table class="table table-bordered table-hover">
                     <thead>
                       <tr>
-                        <th>Environment</th>
+                        <th>Month</th>
                         <th>Total Count</th>
                       </tr>
                     </thead>
-                    <tbody id="envBydate">
-                  </tbody>
-                  </table>
-              </div>
-              <div class="col-sm">
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>UserName</th>
-                        <th>Total</th>
-                      </tr>
-                    </thead>
-                    <tbody id="userCountByEnvBymonth">
+                    <tbody>
+                      {% for data in byMonth %}
+                        <tr onclick="envByMonth('{{data.create_dt__month}}')">
+                          <td>{{data.create_dt__month}}</td>
+                          <td>{{data.name_count}}</td>
+                        </tr>
+                      {% endfor %}
                     </tbody>
                   </table>
+              </div>
+              <div class="col-sm" id="envBydateMain">
+              </div>
+              <div class="col-sm" id="userCountByEnvBymonthMain">
               </div>
             </div>
           </div>
@@ -290,12 +243,20 @@ function env(env) {
     data: {"environment":env},
     success: function(data){
       if(data.status_code == "200"){
-        $('#byUserName').text('')
-        $('#byMonthEnv').text('')
+        $('#byUserNameMain').text('')
+        $('#byUserNameMain').append('<table class="table table-bordered table-hover"><thead><tr>\
+                                          <th>USERNAME</th>\
+                                          <th>Total</th>\
+                                        </tr>\
+                                        </thead>\
+                                      <tbody id="byUserName">\
+                                      </tbody>\
+                                    </table>')
+        $('#byMonthEnvMain').text('')
         $(data.data).each(function( index ) {
           $('#byUserName').append(
-              "<tr><td onclick=byMonth('"+this.username+"','"+data.env+"')\
-              data-username="+this.username+" data-env="+data.env+">"+this.username+"</td>\
+              "<tr onclick=byMonth('"+this.username+"','"+data.env+"')\
+              data-username="+this.username+" data-env="+data.env+"><td>"+this.username+"</td>\
                     <td>"+this.name_count+"</td>\
                </tr>"
               )
@@ -313,7 +274,19 @@ function byMonth(username, env) {
     data: {"username":username, "environment":env,},
     success: function(data){
       if(data.status_code == "200"){
-       $('#byMonthEnv').text('')
+    
+          $('#byMonthEnvMain').text('')
+          $('#byMonthEnvMain').append('<table class="table table-bordered table-hover">\
+                                        <thead>\
+                                          <tr>\
+                                            <th>By Month</th>\
+                                            <th>Total</th>\
+                                          </tr>\
+                                        </thead>\
+                                        <tbody id="byMonthEnv">\
+                                        </tbody>\
+                                      </table>')
+
           $(data.data).each(function( index ) {
             $('#byMonthEnv').append(
                 "<tr><td>"+this.create_dt__month+"</td>\
@@ -334,12 +307,22 @@ function userEnv(username) {
     data: {"username":username},
     success: function(data){
       if(data.status_code == "200"){
-        $('#userByEnv').text('')
-        $('#userByEnvBymonth').text('')
+        $('#userByEnvMain').text('')
+        $('#userByEnvMain').append('<table class="table table-bordered table-hover">\
+                                    <thead>\
+                                      <tr>\
+                                        <th>Environment</th>\
+                                        <th>Total</th>\
+                                      </tr>\
+                                    </thead>\
+                                    <tbody id="userByEnv">\
+                                  </tbody>\
+                                  </table>')
+        $('#userByEnvBymonthMain').text('')
         $(data.data).each(function( index ) {
           $('#userByEnv').append(
-              "<tr><td onclick=userEnvbyMonth('"+this.environment+"','"+data.username+"')\
-                >"+this.environment+"</td>\
+              "<tr onclick=userEnvbyMonth('"+this.environment+"','"+data.username+"')>\
+              <td>"+this.environment+"</td>\
                     <td>"+this.name_count+"</td>\
                </tr>"
               )
@@ -357,7 +340,19 @@ function userEnvbyMonth(environment, username) {
     data: {"username":username, "environment":environment},
     success: function(data){
       if(data.status_code == "200"){
-       $('#userByEnvBymonth').text('')
+       $('#userByEnvBymonthMain').text('')
+
+       $('#userByEnvBymonthMain').append('<table class="table table-bordered table-hover">\
+                            <thead>\
+                              <tr>\
+                                <th>By Month</th>\
+                                <th>Total</th>\
+                              </tr>\
+                            </thead>\
+                            <tbody id="userByEnvBymonth">\
+                            </tbody>\
+                          </table>')
+
         $(data.data).each(function( index ) {
           $('#userByEnvBymonth').append(
               "<tr><td>"+this.create_dt__month+"</td>\
@@ -378,11 +373,21 @@ function envByMonth(month) {
     data: {"month":month},
     success: function(data){
       if(data.status_code == "200"){
-       $('#envBydate').text('')
+       $('#envBydateMain').text('')
+       $('#envBydateMain').append('<table class="table table-bordered table-hover">\
+                                <thead>\
+                                  <tr>\
+                                    <th>Environment</th>\
+                                    <th>Total Count</th>\
+                                  </tr>\
+                                </thead>\
+                                  <tbody id="envBydate">\
+                                </tbody>\
+                              </table>')
+       $('#userCountByEnvBymonthMain').text('')
         $(data.data).each(function( index ) {
           $('#envBydate').append(
-              "<tr onclick=userEnvbyMonthByEnv('"+this.environment+"','"+data.month+"')><td>"+this.environment+"</td>\
-                    <td>"+this.name_count+"</td>\
+              "<tr onclick=userEnvbyMonthByEnv('"+this.environment+"','"+data.month+"')><td>"+this.environment+"</td><td>"+this.name_count+"</td>\
                </tr>"
               )
           });
@@ -399,7 +404,19 @@ function userEnvbyMonthByEnv(environment, month) {
     data: {"month":month, 'environment':environment},
     success: function(data){
       if(data.status_code == "200"){
-       $('#userCountByEnvBymonth').text('')
+       $('#userCountByEnvBymonthMain').text('')
+
+       $('#userCountByEnvBymonthMain').append('<table class="table table-bordered table-hover">\
+                          <thead>\
+                            <tr>\
+                              <th>UserName</th>\
+                              <th>Total</th>\
+                            </tr>\
+                          </thead>\
+                          <tbody id="userCountByEnvBymonth">\
+                          </tbody>\
+                        </table>')
+
         $(data.data).each(function( index ) {
           $('#userCountByEnvBymonth').append(
               "<tr><td>"+this.username+"</td>\
