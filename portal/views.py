@@ -1,4 +1,3 @@
-import json
 import logging
 import pandas as pd
 
@@ -12,7 +11,7 @@ from django.core.paginator import Paginator
 from django.views.decorators.csrf import csrf_exempt
 
 
-from .models import *
+from .models import InfraVltgDetail
 from .tasks import uploadExcelSheet
 
 
@@ -20,15 +19,15 @@ def index(request):
     """
     """
     #by environment
-    environment = InfraVltgDetail.objects.values("environment").annotate( name_count=Count('environment'))
+    environment = InfraVltgDetail.objects.values("environment").annotate(name_count=Count('environment'))
     #by user
-    byuser = InfraVltgDetail.objects.values("username").annotate( name_count=Count('username'))
+    byuser = InfraVltgDetail.objects.values("username").annotate(name_count=Count('username'))
     # by time
-    by_month = InfraVltgDetail.objects.values("create_dt__month").annotate( name_count=Count('create_dt__month'))
+    by_month = InfraVltgDetail.objects.values("create_dt__month").annotate(name_count=Count('create_dt__month'))
 
     # import pdb; pdb.set_trace()
-    context = {'data': InfraVltgDetail.objects.all().count(),'environment': environment,
-               'byuser':byuser,'byMonth': by_month}
+    context = {'data': InfraVltgDetail.objects.all().count(), 'environment': environment,
+               'byuser': byuser, 'byMonth': by_month}
     return render(request, 'portal/index.html', context)
 
 
@@ -37,12 +36,12 @@ def envByUserName(request, *args, **kwargs):
     """
     try:
         env = request.GET['environment']
-        username = InfraVltgDetail.objects.filter(environment=env).values("username").annotate( name_count=Count('username'))
+        username = InfraVltgDetail.objects.filter(environment=env).values("username").annotate(name_count=Count('username'))
         users = []
         for user in username:
             users.append(user)
-        return JsonResponse({"data":users, 'status_code': "200", 'env':env})     
-    except Exception as e:
+        return JsonResponse({"data": users, 'status_code': "200", 'env': env})
+    except Exception:
         return JsonResponse({'error': 'invalid request', 'status': 'fail'})
 
 
@@ -53,13 +52,12 @@ def envByMonth(request, *args, **kwargs):
         env = request.GET['environment']
         username = request.GET['username']
         query_object =Q(environment=env) & Q(username=username)
-        by_month = InfraVltgDetail.objects.filter(query_object).values("create_dt__month").annotate( name_count=Count('create_dt__month'))
-        
+        by_month = InfraVltgDetail.objects.filter(query_object).values("create_dt__month").annotate(name_count=Count('create_dt__month'))
         by_month_data = []
         for data in by_month:
             by_month_data.append(data)
-        return JsonResponse({"data":by_month_data, 'status_code': "200"})     
-    except Exception as e:
+        return JsonResponse({"data": by_month_data, 'status_code': "200"})
+    except Exception:
         return JsonResponse({'error': 'invalid request', 'status': 'fail'})
 
 
@@ -68,12 +66,12 @@ def environmentsByUser(request, *args, **kwargs):
     """
     try:
         username = request.GET['username']
-        environments = InfraVltgDetail.objects.filter(username=username).values("environment").annotate( name_count=Count('environment'))
+        environments = InfraVltgDetail.objects.filter(username=username).values("environment").annotate(name_count=Count('environment'))
         env = []
         for environment in environments:
             env.append(environment)
-        return JsonResponse({"data":env, 'status_code': "200", 'username':username})     
-    except Exception as e:
+        return JsonResponse({"data": env, 'status_code': "200", 'username': username})
+    except Exception:
         return JsonResponse({'error': 'invalid request', 'status': 'fail'})
 
 
@@ -82,12 +80,12 @@ def environmentsByMonth(request, *args, **kwargs):
     """
     try:
         month = request.GET['month']
-        environments = InfraVltgDetail.objects.filter(create_dt__month=month).values("environment").annotate( name_count=Count('environment'))
+        environments = InfraVltgDetail.objects.filter(create_dt__month=month).values("environment").annotate(name_count=Count('environment'))
         env = []
         for environment in environments:
             env.append(environment)
-        return JsonResponse({"data":env, 'status_code': "200", 'month':month})     
-    except Exception as e:
+        return JsonResponse({"data": env, 'status_code': "200", 'month': month})
+    except Exception:
         return JsonResponse({'error': 'invalid request', 'status': 'fail'})
 
 
@@ -97,16 +95,14 @@ def userByEnvironmentsByMonth(request, *args, **kwargs):
     try:
         env = request.GET['environment']
         month = request.GET['month']
-        query_object =Q(environment=env) & Q(create_dt__month=month)
-        usernames = InfraVltgDetail.objects.filter(query_object).values("username").annotate( name_count=Count('username'))
-        
+        query_object = Q(environment=env) & Q(create_dt__month=month)
+        usernames = InfraVltgDetail.objects.filter(query_object).values("username").annotate(name_count=Count('username'))
         username_data = []
         for data in usernames:
             username_data.append(data)
-        return JsonResponse({"data":username_data, 'status_code': "200"})     
-    except Exception as e:
+        return JsonResponse({"data": username_data, 'status_code': "200"})
+    except Exception:
         return JsonResponse({'error': 'invalid request', 'status': 'fail'})
-
 
 
 def excelSheetData(request, *args, **kwargs):
