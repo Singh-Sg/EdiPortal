@@ -3,6 +3,8 @@ import logging
 import pandas as pd
 from celery import shared_task
 from django.http import JsonResponse
+from datetime import datetime
+
 
 
 from .models import *
@@ -30,9 +32,18 @@ def uploadExcelSheet(data):
             hostname = data.iat[row, 8]
             create_dt = data.iat[row, 9]
 
-            # create InfraVltgDetail object
+            try:
+                asof = datetime.strptime(asof.split(" ")[0], "%m/%d/%Y")
+            except Exception:
+                asof = datetime.strptime(asof.split(" ")[0], "%Y-%d-%m")
+
+            try:
+                create_dt = datetime.strptime(create_dt.split(" ")[0], "%m/%d/%Y")
+            except Exception:
+                create_dt = datetime.strptime(create_dt.split(" ")[0], "%Y-%d-%m")
+
             InfraVltgDetail.objects.create(
-                asof=pd.to_datetime(asof),
+                asof=asof,
                 environment=environment,
                 username=username,
                 vltg_identity=vltg_identity,
@@ -41,7 +52,7 @@ def uploadExcelSheet(data):
                 srcip=srcip,
                 typeofapi=typeofapi,
                 hostname=hostname,
-                create_dt=pd.to_datetime(create_dt)
+                create_dt=create_dt
             )
         except Exception as e:
             logger = logging.getLogger('root')

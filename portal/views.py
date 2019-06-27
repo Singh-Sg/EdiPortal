@@ -119,7 +119,7 @@ def excelSheetData(request, *args, **kwargs):
         try:
             file = request.FILES.get('file')
             # Reading file using pandas
-            data = pd.read_excel(file)
+            data = pd.read_excel(file, dtype={'Column1': str, 'Column10': str})
 
             # data = pd.read_excel(file, dtype={'ASOF': str, 'USERNAME': srf})
         except Exception as e:
