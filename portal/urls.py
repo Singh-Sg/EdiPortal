@@ -14,9 +14,4 @@ urlpatterns = [
     path('environments-by-month/', views.environmentsByMonth, name='environment_by_month'),
     path('user-by-environments-by-month/', views.userByEnvironmentsByMonth, name='user_by_environments_by_month'),
 
-
-
-
-
-
 ]

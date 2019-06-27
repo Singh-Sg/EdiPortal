@@ -1,3 +1,4 @@
+import json
 import logging
 import pandas as pd
 
@@ -9,6 +10,8 @@ from django.http import HttpResponse
 from datetime import datetime, timezone
 from django.core.paginator import Paginator
 from django.views.decorators.csrf import csrf_exempt
+from django.db.models.functions import TruncMonth
+from django.core.serializers.json import DjangoJSONEncoder
 
 
 from .models import InfraVltgDetail
@@ -23,7 +26,9 @@ def index(request):
     #by user
     byuser = InfraVltgDetail.objects.values("username").annotate(name_count=Count('username'))
     # by time
-    by_month = InfraVltgDetail.objects.values("create_dt__month").annotate(name_count=Count('create_dt__month'))
+    # by_month = InfraVltgDetail.objects.values("create_dt__month").annotate(name_count=Count('create_dt__month'))
+    
+    by_month = InfraVltgDetail.objects.annotate(month=TruncMonth('create_dt')).values('month').annotate(name_count=Count('id')).values('month', 'name_count')
 
     # import pdb; pdb.set_trace()
     context = {'data': InfraVltgDetail.objects.all().count(), 'environment': environment,
@@ -52,10 +57,8 @@ def envByMonth(request, *args, **kwargs):
         env = request.GET['environment']
         username = request.GET['username']
         query_object =Q(environment=env) & Q(username=username)
-        by_month = InfraVltgDetail.objects.filter(query_object).values("create_dt__month").annotate(name_count=Count('create_dt__month'))
-        by_month_data = []
-        for data in by_month:
-            by_month_data.append(data)
+        by_month = InfraVltgDetail.objects.filter(query_object).annotate(month=TruncMonth('create_dt')).values('month').annotate(name_count=Count('id')).values('month', 'name_count')
+        by_month_data = json.dumps(list(by_month), cls = DjangoJSONEncoder)
         return JsonResponse({"data": by_month_data, 'status_code': "200"})
     except Exception:
         return JsonResponse({'error': 'invalid request', 'status': 'fail'})

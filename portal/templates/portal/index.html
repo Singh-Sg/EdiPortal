@@ -148,7 +148,7 @@ img {
                     <tbody>
                       {% for data in byMonth %}
                         <tr onclick="envByMonth('{{data.create_dt__month}}')">
-                          <td>{{data.create_dt__month}}</td>
+                          <td>{{data.month|date:"M-Y"}}</td>
                           <td>{{data.name_count}}</td>
                         </tr>
                       {% endfor %}
@@ -210,6 +210,9 @@ img {
 <script type="text/javascript">
 
 // This ajax to upload Excel sheet
+
+var monthNames = ["January", "February", "March", "April", "May","June","July", "August", "September", "October", "November","December"]
+
 $(document).on('submit', ".excel-form1", function(e){
       e.preventDefault();
           $(this).ajaxSubmit({
@@ -285,10 +288,10 @@ function byMonth(username, env) {
                                         <tbody id="byMonthEnv">\
                                         </tbody>\
                                       </table>')
-
-          $(data.data).each(function( index ) {
+          var data = JSON.parse(data.data)
+          $(data).each(function( index ) {
             $('#byMonthEnv').append(
-                "<tr><td>"+this.create_dt__month+"</td>\
+                "<tr><td>"+monthNames[parseInt(this.month.split("-")[1]-1)]+"-"+this.month.split("-")[0]+"</td>\
                       <td>"+this.name_count+"</td>\
                  </tr>"
                 )
@@ -351,10 +354,10 @@ function userEnvbyMonth(environment, username) {
                             <tbody id="userByEnvBymonth">\
                             </tbody>\
                           </table>')
-
-        $(data.data).each(function( index ) {
+        var data = JSON.parse(data.data)
+        $(data).each(function( index ) {
           $('#userByEnvBymonth').append(
-              "<tr><td>"+this.create_dt__month+"</td>\
+              "<tr><td>"+monthNames[parseInt(this.month.split("-")[1]-1)]+"-"+this.month.split("-")[0]+"</td>\
                     <td>"+this.name_count+"</td>\
                </tr>"
               )
