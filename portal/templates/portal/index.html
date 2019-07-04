@@ -12,6 +12,10 @@ img {
   margin: 0 auto;
 }
 
+.highlight {
+    background: blue;
+}
+
 
 </style>
 {% endblock %}
@@ -59,7 +63,7 @@ img {
           <div class="container">
             <div class="row">
               <div class="col-sm">
-                  <table class="table table-bordered table-hover">
+                  <table id="env-table" class="table table-bordered">
                     <thead>
                       <tr>
                         <th>Environment</th>
@@ -99,7 +103,7 @@ img {
           <div class="container">
             <div class="row">
               <div class="col-sm">
-                  <table class="table table-bordered table-hover">
+                  <table id="username-table" class="table table-bordered">
                     <thead>
                       <tr>
                         <th>User Name</th>
@@ -138,7 +142,7 @@ img {
           <div class="container">
             <div class="row">
               <div class="col-sm">
-                  <table class="table table-bordered table-hover">
+                  <table id="month-table" class="table table-bordered">
                     <thead>
                       <tr>
                         <th>Month</th>
@@ -238,6 +242,41 @@ $(document).on('submit', ".excel-form1", function(e){
     });
 })
 
+/*$(document).ready(function () {
+    $('tr').click(function () {
+        //Check to see if background color is set or if it's set to white.
+        if(this.style.background == "" || this.style.background =="white") {
+            $(this).css('background', 'red');
+        }
+        else {
+            $(this).css('background', 'white');
+        }
+    });
+});*/
+
+$("#env-table tr:not(:first)").click(function() {
+    var selected = $(this).hasClass("highlight");
+    $("#env-table tr").removeClass("highlight");
+    if(!selected)
+      $(this).addClass("highlight");
+});
+
+$("#username-table tr:not(:first)").click(function() {
+    var selected = $(this).hasClass("highlight");
+    $("#username-table tr").removeClass("highlight");
+    if(!selected)
+      $(this).addClass("highlight");
+});
+
+$("#month-table tr:not(:first)").click(function() {
+    var selected = $(this).hasClass("highlight");
+    $("#month-table tr").removeClass("highlight");
+    if(!selected)
+      $(this).addClass("highlight");
+});
+
+
+
 function env(env) {
   $.ajax({
     type: "GET",
@@ -246,7 +285,7 @@ function env(env) {
     success: function(data){
       if(data.status_code == "200"){
         $('#byUserNameMain').text('')
-        $('#byUserNameMain').append('<table class="table table-bordered table-hover"><thead><tr>\
+        $('#byUserNameMain').append('<table id="username-by-env" class="table table-bordered"><thead><tr>\
                                           <th>USERNAME</th>\
                                           <th>Total</th>\
                                         </tr>\
@@ -264,6 +303,13 @@ function env(env) {
               )
           });
         }
+
+        $("#username-by-env tr:not(:first)").click(function() {
+          var selected = $(this).hasClass("highlight");
+          $("#username-by-env tr").removeClass("highlight");
+          if(!selected)
+            $(this).addClass("highlight");
+        });
       }
   });
 }
@@ -278,7 +324,7 @@ function byMonth(username, env) {
       if(data.status_code == "200"){
     
           $('#byMonthEnvMain').text('')
-          $('#byMonthEnvMain').append('<table class="table table-bordered table-hover">\
+          $('#byMonthEnvMain').append('<table id="data3" class="table table-bordered">\
                                         <thead>\
                                           <tr>\
                                             <th>By Month</th>\
@@ -297,6 +343,12 @@ function byMonth(username, env) {
                 )
             });
         }
+        $("#data3 tr:not(:first)").click(function() {
+          var selected = $(this).hasClass("highlight");
+          $("#data3 tr").removeClass("highlight");
+          if(!selected)
+            $(this).addClass("highlight");
+        });
       }
   });
 }
@@ -310,7 +362,7 @@ function userEnv(username) {
     success: function(data){
       if(data.status_code == "200"){
         $('#userByEnvMain').text('')
-        $('#userByEnvMain').append('<table class="table table-bordered table-hover">\
+        $('#userByEnvMain').append('<table id="env-by-username" class="table table-bordered">\
                                     <thead>\
                                       <tr>\
                                         <th>Environment</th>\
@@ -330,6 +382,12 @@ function userEnv(username) {
               )
           });
         }
+        $("#env-by-username tr:not(:first)").click(function() {
+          var selected = $(this).hasClass("highlight");
+          $("#env-by-username tr").removeClass("highlight");
+          if(!selected)
+            $(this).addClass("highlight");
+        });
     }
   });
 }
@@ -344,7 +402,7 @@ function userEnvbyMonth(environment, username) {
       if(data.status_code == "200"){
        $('#userByEnvBymonthMain').text('')
 
-       $('#userByEnvBymonthMain').append('<table class="table table-bordered table-hover">\
+       $('#userByEnvBymonthMain').append('<table id="userenv-by-month" class="table table-bordered">\
                             <thead>\
                               <tr>\
                                 <th>By Month</th>\
@@ -363,6 +421,12 @@ function userEnvbyMonth(environment, username) {
               )
           });
       }
+      $("#userenv-by-month tr:not(:first)").click(function() {
+        var selected = $(this).hasClass("highlight");
+        $("#userenv-by-month tr").removeClass("highlight");
+        if(!selected)
+          $(this).addClass("highlight");
+      });
     }
   });
 }
@@ -376,7 +440,7 @@ function envByMonth(month) {
     success: function(data){
       if(data.status_code == "200"){
        $('#envBydateMain').text('')
-       $('#envBydateMain').append('<table class="table table-bordered table-hover">\
+       $('#envBydateMain').append('<table id="env-by-month" class="table table-bordered">\
                                 <thead>\
                                   <tr>\
                                     <th>Environment</th>\
@@ -394,6 +458,12 @@ function envByMonth(month) {
               )
           });
       }
+      $("#env-by-month tr:not(:first)").click(function() {
+        var selected = $(this).hasClass("highlight");
+        $("#env-by-month tr").removeClass("highlight");
+        if(!selected)
+          $(this).addClass("highlight");
+      });
     }
   });
 }
@@ -408,7 +478,7 @@ function userEnvbyMonthByEnv(environment, month) {
       if(data.status_code == "200"){
        $('#userCountByEnvBymonthMain').text('')
 
-       $('#userCountByEnvBymonthMain').append('<table class="table table-bordered table-hover">\
+       $('#userCountByEnvBymonthMain').append('<table id="userenv-by-month-by-env" class="table table-bordered">\
                           <thead>\
                             <tr>\
                               <th>UserName</th>\
@@ -427,6 +497,12 @@ function userEnvbyMonthByEnv(environment, month) {
               )
           });
       }
+      $("#userenv-by-month-by-env tr:not(:first)").click(function() {
+        var selected = $(this).hasClass("highlight");
+        $("#userenv-by-month-by-env tr").removeClass("highlight");
+        if(!selected)
+          $(this).addClass("highlight");
+      });
     }
   });
 }
