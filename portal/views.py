@@ -16,23 +16,41 @@ from django.core.serializers.json import DjangoJSONEncoder
 
 from .models import InfraVltgDetail
 from .tasks import uploadExcelSheet
+import psycopg2
 
+conn = psycopg2.connect(database="jobworkio_6",
+        user = "postgres",
+        password = "postgres",
+        host = "localhost",
+        port = "5432")
 
 def index(request):
     """
     """
-    #by environment
-    environment = InfraVltgDetail.objects.values("environment").annotate(name_count=Count('environment'))
-    #by user
-    byuser = InfraVltgDetail.objects.values("username").annotate(name_count=Count('username'))
-    # by time
-    # by_month = InfraVltgDetail.objects.values("create_dt__month").annotate(name_count=Count('create_dt__month'))
-    
-    by_month = InfraVltgDetail.objects.annotate(month=TruncMonth('create_dt')).values('month').annotate(name_count=Count('id')).values('month', 'name_count')
 
-    # import pdb; pdb.set_trace()
-    context = {'data': InfraVltgDetail.objects.all().count(), 'environment': environment,
+    cur = conn.cursor()
+
+    #by environment
+    cur.execute('SELECT "portal_infravltgdetail"."environment", COUNT("portal_infravltgdetail"."environment") AS "name_count" FROM "portal_infravltgdetail" GROUP BY "portal_infravltgdetail"."environment"')
+    environment = cur.fetchall()
+
+    #by user
+    cur.execute('SELECT "portal_infravltgdetail"."username", COUNT("portal_infravltgdetail"."username") AS "name_count" FROM "portal_infravltgdetail" GROUP BY "portal_infravltgdetail"."username"')
+    byuser = cur.fetchall()
+    
+    # by time
+    by_month = InfraVltgDetail.objects.annotate(month=TruncMonth('create_dt')).values('month').annotate(name_count=Count('id')).values('month', 'name_count')
+    import pdb; pdb.set_trace()
+
+    # dddd = cur.execute(by_month.query)
+
+    # cur.execute('SELECT TRUNC("month", "portal_infravltgdetail"."create_dt", UTC) AS month, COUNT("portal_infravltgdetail"."id") AS "name_count" FROM "portal_infravltgdetail" GROUP BY django_datetime_trunc("month", "portal_infravltgdetail"."create_dt", UTC)')
+    # by_month = cur.fetchall()
+    cur.execute('SELECT COUNT(*) from portal_infravltgdetail')
+    data = cur.fetchall()
+    context = {'data': data, 'environment': environment,
                'byuser': byuser, 'byMonth': by_month}
+    return render(request, 'portal/index.html', context)
     return render(request, 'portal/index.html', context)
 
 

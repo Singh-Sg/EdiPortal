@@ -41,7 +41,7 @@ img {
     <!-- <div class="card-header"> -->
       <h2 class="mb-0">
         <button class="btn " type="button">
-          <h3>Total Service Request :<b> {{data}} </b></h3>
+          <h3>Total Service Request :<b> {{data.0.0}} </b></h3>
         </button>
       </h2>
     <!-- </div> -->
@@ -72,9 +72,9 @@ img {
                     </thead>
                     <tbody>
                       {% for data in environment %}
-                        <tr onclick="env('{{data.environment}}')" data-id={{data.environment}}>
-                          <td>{{data.environment}}</td>
-                          <td>{{data.name_count}}</td>
+                        <tr id="byenvironment{{ forloop.counter }}" class="environment" data-id={{data.0}}>
+                          <td>{{data.0}}</td>
+                          <td>{{data.1}}</td>
                         </tr>
                       {% endfor %}
                     </tbody>
@@ -112,9 +112,9 @@ img {
                     </thead>
                     <tbody>
                       {% for data in byuser %}
-                        <tr onclick="userEnv('{{data.username}}')" data-id={{data.username}}>
-                          <td>{{data.username}}</td>
-                          <td>{{data.name_count}}</td>
+                        <tr id= "byuser{{ forloop.counter }}" onclick="userEnv('{{data.0}}')" data-id={{data.0}}>
+                          <td>{{data.0}}</td>
+                          <td>{{data.0}}</td>
                         </tr>
                       {% endfor %}
                      </tbody>
@@ -151,7 +151,7 @@ img {
                     </thead>
                     <tbody>
                       {% for data in byMonth %}
-                        <tr onclick="envByMonth('{{data.create_dt__month}}')">
+                        <tr onclick="envByMonth('{{data.month}}')">
                           <td>{{data.month|date:"M-Y"}}</td>
                           <td>{{data.name_count}}</td>
                         </tr>
@@ -276,8 +276,8 @@ $("#month-table tr:not(:first)").click(function() {
 });
 
 
-
-function env(env) {
+$('.environment').click(function(){
+  var env = $(this).attr("data-id")
   $.ajax({
     type: "GET",
     url: "env/",
@@ -312,7 +312,7 @@ function env(env) {
         });
       }
   });
-}
+});
 
 
 function byMonth(username, env) {
