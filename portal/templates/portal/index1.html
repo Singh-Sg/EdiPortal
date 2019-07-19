@@ -1,0 +1,319 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block title %}
+	Portal
+{% endblock %}
+
+{% block content %}
+
+<!--Begin::Section-->
+<div class="row">
+	<div class="col-xl-4">
+		<div class="kt-portlet kt-portlet--tabs kt-portlet--height-fluid">
+		    <div class="kt-portlet__head">
+		        <div class="kt-portlet__head-label">
+		        <h3 class="kt-portlet__head-title">
+		        Request By Environment
+		        </h3>
+		        </div>
+		        <div class="kt-portlet__head-toolbar">
+					<div class="dropdown dropdown-inline">
+						<button type="button" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							<i class="flaticon-more-1"></i>
+
+						</button>
+						<div class="dropdown-menu dropdown-menu-right dropdown-menu-md dropdown-menu-fit">
+
+							<!--begin::Nav-->
+							<ul class="kt-nav">
+								<li class="kt-nav__head">
+									Export Options
+									<i class="flaticon2-information" data-toggle="kt-tooltip" data-placement="right" title="Click to learn more..."></i>
+								</li>
+								<li class="kt-nav__separator"></li>
+								<li class="kt-nav__item">
+									<a href="#" class="kt-nav__link">
+										<i class="kt-nav__link-icon flaticon2-drop"></i>
+										<span class="kt-nav__link-text">Activity</span>
+									</a>
+								</li>
+								<li class="kt-nav__item">
+									<a href="#" class="kt-nav__link">
+										<i class="kt-nav__link-icon flaticon2-calendar-8"></i>
+										<span class="kt-nav__link-text">FAQ</span>
+									</a>
+								</li>
+								<li class="kt-nav__item">
+									<a href="#" class="kt-nav__link">
+										<i class="kt-nav__link-icon flaticon2-link"></i>
+										<span class="kt-nav__link-text">Settings</span>
+									</a>
+								</li>
+								<li class="kt-nav__item">
+									<a href="#" class="kt-nav__link">
+										<i class="kt-nav__link-icon flaticon2-new-email"></i>
+										<span class="kt-nav__link-text">Support</span>
+										<span class="kt-nav__link-badge">
+											<span class="kt-badge kt-badge--success">5</span>
+										</span>
+									</a>
+								</li>
+								<li class="kt-nav__separator"></li>
+								<li class="kt-nav__foot">
+									<a class="btn btn-label-danger btn-bold btn-sm" href="#">Upgrade plan</a>
+									<a class="btn btn-clean btn-bold btn-sm" href="#" data-toggle="kt-tooltip" data-placement="right" title="Click to learn more...">Learn more</a>
+								</li>
+							</ul>
+
+							<!--end::Nav-->
+						</div>
+					</div>
+				</div>
+		        <div class="kt-portlet__head-toolbar">
+		            <ul class="nav nav-tabs nav-tabs-line nav-tabs-bold nav-tabs-line-brand" role="tablist">
+		              <li class="nav-item">
+		                <a class="nav-link active" data-toggle="tab" href="#kt_widget4_tab1_content" role="tab">
+		                    Total Count
+		                </a>
+		              </li>
+		            </ul>
+		        </div>
+		    </div>
+		    <div class="kt-portlet__body">
+
+		    	{% for data in environment %}
+					<div class="tab-content environment" id="byenvironment{{ forloop.counter }}" data-id={{data.0}}>
+					    <div class="tab-pane active" id="kt_widget4_tab1_content">
+					        <div class="kt-widget4">
+					            <div class="kt-widget4__item">
+					                <div class="kt-widget4__info">
+					                    <a class="kt-widget4__username">
+					                        {{data.0}}
+					                    </a>
+					                </div>
+					                <a class="btn btn-sm btn-label-brand btn-bold">{{data.1}}</a>
+					            </div>
+					        </div>
+					    </div>
+					</div>
+		        {% endfor %}
+		    </div>
+		</div>
+	</div>
+
+	<div class="col-xl-4" id="byUserNameMain">
+	</div>
+
+	<div class="col-xl-4" id="byMonthEnvMain">
+	</div>
+</div>
+{% endblock %}
+ 
+
+{% block javascript %}
+<script type="text/javascript">
+
+var monthNames = ["January", "February", "March", "April", "May","June","July", "August", "September", "October", "November","December"]
+
+$('.environment').click(function(){
+  var env = $(this).attr("data-id")
+  $.ajax({
+    type: "GET",
+    url: "portal/env/",
+    data: {"environment":env},
+    success: function(data){
+      if(data.status_code == "200"){
+        $('#byUserNameMain').text('')
+        $('#byUserNameMain').append('<div class="kt-portlet kt-portlet--tabs kt-portlet--height-fluid">\
+		    <div class="kt-portlet__head">\
+		        <div class="kt-portlet__head-label">\
+		        <h3 class="kt-portlet__head-title">\
+		        Request By UserName \
+		        </h3>\
+		        </div>\
+		        <div class="kt-portlet__head-toolbar">\
+					<div class="dropdown dropdown-inline">\
+						<button type="button" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">\
+							<i class="flaticon-more-1"></i>\
+						</button>\
+						<div class="dropdown-menu dropdown-menu-right dropdown-menu-md dropdown-menu-fit">\
+							<ul class="kt-nav">\
+								<li class="kt-nav__head">Export Options\
+									<i class="flaticon2-information" data-toggle="kt-tooltip" data-placement="right" title="Click to learn more..."></i>\
+								</li>\
+								<li class="kt-nav__separator"></li>\
+								<li class="kt-nav__item">\
+									<a href="#" class="kt-nav__link">\
+										<i class="kt-nav__link-icon flaticon2-drop"></i>\
+										<span class="kt-nav__link-text">Activity</span>\
+									</a>\
+								</li>\
+								<li class="kt-nav__item">\
+									<a href="#" class="kt-nav__link">\
+										<i class="kt-nav__link-icon flaticon2-calendar-8"></i>\
+										<span class="kt-nav__link-text">FAQ</span>\
+									</a>\
+								</li>\
+								<li class="kt-nav__item">\
+									<a href="#" class="kt-nav__link">\
+										<i class="kt-nav__link-icon flaticon2-link"></i>\
+										<span class="kt-nav__link-text">Settings</span>\
+									</a>\
+								</li>\
+								<li class="kt-nav__item">\
+									<a href="#" class="kt-nav__link">\
+										<i class="kt-nav__link-icon flaticon2-new-email"></i>\
+										<span class="kt-nav__link-text">Support</span>\
+										<span class="kt-nav__link-badge">\
+											<span class="kt-badge kt-badge--success">5</span>\
+										</span>\
+									</a>\
+								</li>\
+								<li class="kt-nav__separator"></li>\
+								<li class="kt-nav__foot">\
+									<a class="btn btn-label-danger btn-bold btn-sm" href="#">Upgrade plan</a>\
+									<a class="btn btn-clean btn-bold btn-sm" href="#" data-toggle="kt-tooltip" data-placement="right" title="Click to learn more...">Learn more</a>\
+								</li>\
+							</ul>\
+						</div>\
+					</div>\
+				</div>\
+		        <div class="kt-portlet__head-toolbar">\
+		            <ul class="nav nav-tabs nav-tabs-line nav-tabs-bold nav-tabs-line-brand" role="tablist">\
+		              <li class="nav-item">\
+		                <a class="nav-link active" data-toggle="tab" href="#kt_widget4_tab1_content" role="tab">\
+		                    Total Count\
+		                </a>\
+		              </li>\
+		            </ul>\
+		        </div>\
+		    </div>\
+		    <div class="kt-portlet__body" id="byUserName">\
+		    </div>\
+		</div>')
+        $('#byMonthEnvMain').text('')
+        $(data.data).each(function( index ) {
+          $('#byUserName').append(
+              '<div class="tab-content" onclick=byMonth("'+this.username+'","'+data.env+'") data-username="'+this.username+'" data-env='+data.env+'>\
+					    <div class="tab-pane active" id="kt_widget4_tab1_content">\
+					        <div class="kt-widget4">\
+					            <div class="kt-widget4__item">\
+					                <div class="kt-widget4__info">\
+					                    <a class="kt-widget4__username">\
+					                        '+this.username+'\
+					                    </a>\
+					                </div>\
+					                <a class="btn btn-sm btn-label-brand btn-bold">'+this.name_count+'</a>\
+					            </div>\
+					        </div>\
+					    </div>\
+					</div>')
+          		});
+        	}
+      }
+  });
+});
+
+function byMonth(username, env) {
+  $.ajax({
+    type: "GET",
+    url: "portal/env-by-month/",
+    data: {"username":username, "environment":env,},
+    success: function(data){
+      if(data.status_code == "200"){
+    
+        $('#byMonthEnvMain').text('')
+        $('#byMonthEnvMain').append('<div class="kt-portlet kt-portlet--tabs kt-portlet--height-fluid">\
+		    <div class="kt-portlet__head">\
+		        <div class="kt-portlet__head-label">\
+		        <h3 class="kt-portlet__head-title">\
+		        Request By Month \
+		        </h3>\
+		        </div>\
+		        <div class="kt-portlet__head-toolbar">\
+					<div class="dropdown dropdown-inline">\
+						<button type="button" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">\
+							<i class="flaticon-more-1"></i>\
+						</button>\
+						<div class="dropdown-menu dropdown-menu-right dropdown-menu-md dropdown-menu-fit">\
+							<ul class="kt-nav">\
+								<li class="kt-nav__head">Export Options\
+									<i class="flaticon2-information" data-toggle="kt-tooltip" data-placement="right" title="Click to learn more..."></i>\
+								</li>\
+								<li class="kt-nav__separator"></li>\
+								<li class="kt-nav__item">\
+									<a href="#" class="kt-nav__link">\
+										<i class="kt-nav__link-icon flaticon2-drop"></i>\
+										<span class="kt-nav__link-text">Activity</span>\
+									</a>\
+								</li>\
+								<li class="kt-nav__item">\
+									<a href="#" class="kt-nav__link">\
+										<i class="kt-nav__link-icon flaticon2-calendar-8"></i>\
+										<span class="kt-nav__link-text">FAQ</span>\
+									</a>\
+								</li>\
+								<li class="kt-nav__item">\
+									<a href="#" class="kt-nav__link">\
+										<i class="kt-nav__link-icon flaticon2-link"></i>\
+										<span class="kt-nav__link-text">Settings</span>\
+									</a>\
+								</li>\
+								<li class="kt-nav__item">\
+									<a href="#" class="kt-nav__link">\
+										<i class="kt-nav__link-icon flaticon2-new-email"></i>\
+										<span class="kt-nav__link-text">Support</span>\
+										<span class="kt-nav__link-badge">\
+											<span class="kt-badge kt-badge--success">5</span>\
+										</span>\
+									</a>\
+								</li>\
+								<li class="kt-nav__separator"></li>\
+								<li class="kt-nav__foot">\
+									<a class="btn btn-label-danger btn-bold btn-sm" href="#">Upgrade plan</a>\
+									<a class="btn btn-clean btn-bold btn-sm" href="#" data-toggle="kt-tooltip" data-placement="right" title="Click to learn more...">Learn more</a>\
+								</li>\
+							</ul>\
+						</div>\
+					</div>\
+				</div>\
+		        <div class="kt-portlet__head-toolbar">\
+		            <ul class="nav nav-tabs nav-tabs-line nav-tabs-bold nav-tabs-line-brand" role="tablist">\
+		              <li class="nav-item">\
+		                <a class="nav-link active" data-toggle="tab" href="#kt_widget4_tab1_content" role="tab">\
+		                    Total Count\
+		                </a>\
+		              </li>\
+		            </ul>\
+		        </div>\
+		    </div>\
+		    <div class="kt-portlet__body" id="byMonthEnv">\
+		    </div>\
+		</div>')
+
+         var data = JSON.parse(data.data)
+          $(data).each(function( index ) {
+            $('#byMonthEnv').append(
+              '<div class="tab-content">\
+					    <div class="tab-pane active" id="kt_widget4_tab1_content">\
+					        <div class="kt-widget4">\
+					            <div class="kt-widget4__item">\
+					                <div class="kt-widget4__info">\
+					                    <a class="kt-widget4__username">\
+					                        '+monthNames[parseInt(this.month.split("-")[1]-1)]+"-"+this.month.split("-")[0]+'\
+					                    </a>\
+					                </div>\
+					                <a class="btn btn-sm btn-label-brand btn-bold">'+this.name_count+'</a>\
+					            </div>\
+					        </div>\
+					    </div>\
+					</div>')
+          	});
+        }
+      }
+  });
+}
+
+</script>
+{% endblock %}
