@@ -40,7 +40,7 @@ def index(request):
     
     # by time
     by_month = InfraVltgDetail.objects.annotate(month=TruncMonth('create_dt')).values('month').annotate(name_count=Count('id')).values('month', 'name_count')
-    import pdb; pdb.set_trace()
+    # import pdb; pdb.set_trace()
 
     # dddd = cur.execute(by_month.query)
 
@@ -50,8 +50,8 @@ def index(request):
     data = cur.fetchall()
     context = {'data': data, 'environment': environment,
                'byuser': byuser, 'byMonth': by_month}
-    return render(request, 'portal/index.html', context)
-    return render(request, 'portal/index.html', context)
+    return render(request, 'portal/index1.html', context)
+
 
 
 def envByUserName(request, *args, **kwargs):
