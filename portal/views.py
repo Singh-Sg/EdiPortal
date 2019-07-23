@@ -53,6 +53,25 @@ def index(request):
     return render(request, 'portal/index1.html', context)
 
 
+def byUser(request):
+    """
+    """
+    cur = conn.cursor()
+    cur.execute('SELECT username, COUNT(username) AS name_count FROM portal_infravltgdetail GROUP BY username')
+    byuser = cur.fetchall()
+    context = {'byuser': byuser}
+    return render(request, 'portal/byuser.html', context)
+
+
+def byMonth(request):
+    """
+    """
+    cur = conn.cursor()
+    cur.execute("SELECT create_dt, COUNT(create_dt)  FROM portal_infravltgdetail GROUP BY create_dt")
+    by_month = cur.fetchall()
+    context = {'byMonth': by_month}
+    return render(request, 'portal/bymonth.html', context)
+
 
 def envByUserName(request, *args, **kwargs):
     """
