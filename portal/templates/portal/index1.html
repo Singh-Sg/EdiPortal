@@ -195,16 +195,16 @@ $('.environment').click(function(){
         $('#byMonthEnvMain').text('')
         $(data.data).each(function( index ) {
           $('#byUserName').append(
-              '<div class="tab-content" onclick=byMonth("'+this.username+'","'+data.env+'") data-username="'+this.username+'" data-env='+data.env+'>\
+              '<div class="tab-content" onclick=byMonth("'+this[0]+'","'+data.env+'") data-username="'+this[0]+'" data-env='+data.env+'>\
 					    <div class="tab-pane active" id="kt_widget4_tab1_content">\
 					        <div class="kt-widget4">\
 					            <div class="kt-widget4__item">\
 					                <div class="kt-widget4__info">\
 					                    <a class="kt-widget4__username">\
-					                        '+this.username+'\
+					                        '+this[0]+'\
 					                    </a>\
 					                </div>\
-					                <a class="btn btn-sm btn-label-brand btn-bold">'+this.name_count+'</a>\
+					                <a class="btn btn-sm btn-label-brand btn-bold">'+this[1]+'</a>\
 					            </div>\
 					        </div>\
 					    </div>\
@@ -301,10 +301,10 @@ function byMonth(username, env) {
 					            <div class="kt-widget4__item">\
 					                <div class="kt-widget4__info">\
 					                    <a class="kt-widget4__username">\
-					                        '+monthNames[parseInt(this.month.split("-")[1]-1)]+"-"+this.month.split("-")[0]+'\
+					                        '+monthNames[parseInt(this[0].split("-")[1]-1)]+"-"+this[0].split("-")[0]+'\
 					                    </a>\
 					                </div>\
-					                <a class="btn btn-sm btn-label-brand btn-bold">'+this.name_count+'</a>\
+					                <a class="btn btn-sm btn-label-brand btn-bold">'+this[1]+'</a>\
 					            </div>\
 					        </div>\
 					    </div>\

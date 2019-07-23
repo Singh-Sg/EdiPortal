@@ -1,4 +1,4 @@
-{% extends 'index.html' %}
+{% extends 'base.html' %}
 {% load static %}
 {% block stylesheet %}
 <style type="text/css">
@@ -112,9 +112,9 @@ img {
                     </thead>
                     <tbody>
                       {% for data in byuser %}
-                        <tr id= "byuser{{ forloop.counter }}" onclick="userEnv('{{data.0}}')" data-id={{data.0}}>
+                      <tr id= "byuser{{ forloop.counter }}" onclick="userEnv('{{data.0}}')" data-id={{data.0}}>
                           <td>{{data.0}}</td>
-                          <td>{{data.0}}</td>
+                          <td>{{data.1}}</td>
                         </tr>
                       {% endfor %}
                      </tbody>
@@ -151,9 +151,10 @@ img {
                     </thead>
                     <tbody>
                       {% for data in byMonth %}
-                        <tr onclick="envByMonth('{{data.month}}')">
-                          <td>{{data.month|date:"M-Y"}}</td>
-                          <td>{{data.name_count}}</td>
+                        <tr onclick="envByMonth('{{data.0|date:'n' }}','{{data.0|date:'Y'}}')">
+                          <td>{{data.0|date:"M-Y"}}</td>
+                          <td>{{data.1}}</td>
+
                         </tr>
                       {% endfor %}
                     </tbody>
@@ -296,9 +297,9 @@ $('.environment').click(function(){
         $('#byMonthEnvMain').text('')
         $(data.data).each(function( index ) {
           $('#byUserName').append(
-              "<tr onclick=byMonth('"+this.username+"','"+data.env+"')\
-              data-username="+this.username+" data-env="+data.env+"><td>"+this.username+"</td>\
-                    <td>"+this.name_count+"</td>\
+              "<tr onclick=byMonth('"+this[0]+"','"+data.env+"')\
+              data-username="+this[0]+" data-env="+data.env+"><td>"+this[0]+"</td>\
+                    <td>"+this[1]+"</td>\
                </tr>"
               )
           });
@@ -324,6 +325,7 @@ function byMonth(username, env) {
       if(data.status_code == "200"){
     
           $('#byMonthEnvMain').text('')
+          debugger
           $('#byMonthEnvMain').append('<table id="data3" class="table table-bordered">\
                                         <thead>\
                                           <tr>\
@@ -337,8 +339,8 @@ function byMonth(username, env) {
           var data = JSON.parse(data.data)
           $(data).each(function( index ) {
             $('#byMonthEnv').append(
-                "<tr><td>"+monthNames[parseInt(this.month.split("-")[1]-1)]+"-"+this.month.split("-")[0]+"</td>\
-                      <td>"+this.name_count+"</td>\
+                "<tr><td>"+monthNames[parseInt(this[0].split("-")[1]-1)]+"-"+this[0].split("-")[0]+"</td>\
+                      <td>"+this[1]+"</td>\
                  </tr>"
                 )
             });
@@ -375,9 +377,9 @@ function userEnv(username) {
         $('#userByEnvBymonthMain').text('')
         $(data.data).each(function( index ) {
           $('#userByEnv').append(
-              "<tr onclick=userEnvbyMonth('"+this.environment+"','"+data.username+"')>\
-              <td>"+this.environment+"</td>\
-                    <td>"+this.name_count+"</td>\
+              "<tr onclick=userEnvbyMonth('"+this[0]+"','"+data.username+"')>\
+              <td>"+this[0]+"</td>\
+                    <td>"+this[1]+"</td>\
                </tr>"
               )
           });
@@ -415,8 +417,8 @@ function userEnvbyMonth(environment, username) {
         var data = JSON.parse(data.data)
         $(data).each(function( index ) {
           $('#userByEnvBymonth').append(
-              "<tr><td>"+monthNames[parseInt(this.month.split("-")[1]-1)]+"-"+this.month.split("-")[0]+"</td>\
-                    <td>"+this.name_count+"</td>\
+              "<tr><td>"+monthNames[parseInt(this[0].split("-")[1]-1)]+"-"+this[0].split("-")[0]+"</td>\
+                    <td>"+this[1]+"</td>\
                </tr>"
               )
           });
@@ -432,11 +434,11 @@ function userEnvbyMonth(environment, username) {
 }
 
 
-function envByMonth(month) {
+function envByMonth(month, year) {
   $.ajax({
     type: "GET",
     url: "environments-by-month/",
-    data: {"month":month},
+    data: {"month":month, "year":year},
     success: function(data){
       if(data.status_code == "200"){
        $('#envBydateMain').text('')
