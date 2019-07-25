@@ -167,9 +167,6 @@ def excelSheetData(request, *args, **kwargs):
     API endpoint to upload excel sheet
     """
     if request.method == "POST":
-        """
-        Get excel sheet from zigway bosses
-        """
         try:
             file = request.FILES.get('file')
             # Reading file using pandas

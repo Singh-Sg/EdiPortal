@@ -1,6 +1,15 @@
 {% extends 'index.html' %}
 {% load static %}
 
+
+{% block stylesheet %}
+<style type="text/css">
+.highlight {
+    background: #282733 !important;
+}
+</style>
+{% endblock %}
+
 {% block title %}
 	Portal
 {% endblock %}
@@ -80,7 +89,7 @@
 		            </ul>
 		        </div>
 		    </div>
-		    <div class="kt-portlet__body">
+		    <div class="kt-portlet__body" id="month-table">
 
 		    	{% for data in byMonth %}
 					<div class="tab-content byuser" id="byenvironment{{ forloop.counter }}" data-id={{data.0}}>
@@ -88,7 +97,7 @@
 					        <div class="kt-widget4">
 					            <div class="kt-widget4__item">
 					                <div class="kt-widget4__info">
-					                    <a class="kt-widget4__username">
+					                    <a>
 					                        {{data.0}}
 					                    </a>
 					                </div>
@@ -115,6 +124,13 @@
 <script type="text/javascript">
 
 var monthNames = ["January", "February", "March", "April", "May","June","July", "August", "September", "October", "November","December"]
+
+$("#month-table .kt-widget4__item").click(function() {
+    var selected = $(this).hasClass("highlight");
+    $("#month-table .kt-widget4__item").removeClass("highlight");
+    if(!selected)
+      $(this).addClass("highlight");
+});
 
 $('.environment').click(function(){
   var env = $(this).attr("data-id")
@@ -200,7 +216,7 @@ $('.environment').click(function(){
 					        <div class="kt-widget4">\
 					            <div class="kt-widget4__item">\
 					                <div class="kt-widget4__info">\
-					                    <a class="kt-widget4__username">\
+					                    <a>\
 					                        '+this[0]+'\
 					                    </a>\
 					                </div>\
@@ -210,7 +226,14 @@ $('.environment').click(function(){
 					    </div>\
 					</div>')
           		});
-        	}
+
+        	$("#byUserName .kt-widget4__item").click(function() {
+          		var selected = $(this).hasClass("highlight");
+          		$("#byUserName .kt-widget4__item").removeClass("highlight");
+		        if(!selected)
+		            $(this).addClass("highlight");
+        	});
+        }
       }
   });
 });
@@ -300,7 +323,7 @@ function byMonth(username, env) {
 					        <div class="kt-widget4">\
 					            <div class="kt-widget4__item">\
 					                <div class="kt-widget4__info">\
-					                    <a class="kt-widget4__username">\
+					                    <a>\
 					                        '+monthNames[parseInt(this[0].split("-")[1]-1)]+"-"+this[0].split("-")[0]+'\
 					                    </a>\
 					                </div>\
@@ -310,6 +333,12 @@ function byMonth(username, env) {
 					    </div>\
 					</div>')
           	});
+          	$("#byMonthEnv .kt-widget4__item").click(function() {
+          		var selected = $(this).hasClass("highlight");
+          		$("#byMonthEnv .kt-widget4__item").removeClass("highlight");
+		        if(!selected)
+		            $(this).addClass("highlight");
+        	});
         }
       }
   });
